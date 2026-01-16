@@ -71,37 +71,42 @@
                 <div class="p-6">
                     <!-- 步骤1：基本信息 -->
                     <div x-show="step === 1" x-transition>
-                        <h2 class="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2">
+                        <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
                             <span class="text-2xl">📝</span> 基本信息
                         </h2>
+                        <!-- 简要说明 -->
+                        <div class="bg-purple-50 rounded-lg px-4 py-2 mb-4 text-sm text-purple-700">
+                            💡 <b>带 * 为必填</b>。插件ID用于文件夹命名，名称是用户看到的标题。
+                        </div>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">
                                     插件ID <span class="text-red-500">*</span>
-                                    <span class="text-gray-400 font-normal text-xs">（英文，如 my_plugin）</span>
                                 </label>
-                                <input type="text" x-model="form.id" placeholder="my_awesome_plugin"
+                                <input type="text" x-model="form.id" placeholder="如：daily_fortune、dice_roll"
                                        class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-purple-400 focus:ring-2 focus:ring-purple-100 transition-all">
+                                <p class="text-xs text-gray-400 mt-1">小写字母+数字+下划线，字母开头</p>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">
                                     插件名称 <span class="text-red-500">*</span>
-                                    <span class="text-gray-400 font-normal text-xs">（中文显示名）</span>
                                 </label>
-                                <input type="text" x-model="form.cn_name" placeholder="我的超棒插件"
+                                <input type="text" x-model="form.cn_name" placeholder="如：每日运势、骰子插件"
                                        class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-purple-400 focus:ring-2 focus:ring-purple-100 transition-all">
+                                <p class="text-xs text-gray-400 mt-1">显示在插件市场的中文名称</p>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">
                                     作者名称 <span class="text-red-500">*</span>
                                 </label>
-                                <input type="text" x-model="form.author" placeholder="你的名字或昵称"
+                                <input type="text" x-model="form.author" placeholder="你的昵称或ID"
                                        class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-purple-400 focus:ring-2 focus:ring-purple-100 transition-all">
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">版本号</label>
                                 <input type="text" x-model="form.version" placeholder="1.0.0"
                                        class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-purple-400 focus:ring-2 focus:ring-purple-100 transition-all">
+                                <p class="text-xs text-gray-400 mt-1">格式：主版本.次版本.修订号</p>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">分类</label>
@@ -154,45 +159,50 @@
                                     </optgroup>
                                 </select>
                             </div>
-                            <div>
+                            <div class="md:col-span-2">
                                 <label class="block text-sm font-medium text-gray-700 mb-1">
                                     简短介绍 <span class="text-red-500">*</span>
                                 </label>
-                                <input type="text" x-model="form.description" placeholder="一句话描述你的插件"
+                                <input type="text" x-model="form.description" placeholder="如：每天生成个性化运势预测，包含爱情、财运、事业等多维度"
                                        class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-purple-400 focus:ring-2 focus:ring-purple-100 transition-all">
+                                <p class="text-xs text-gray-400 mt-1">一句话概括插件功能，显示在列表中</p>
                             </div>
                         </div>
                     </div>
                     
                     <!-- 步骤2：功能描述 -->
                     <div x-show="step === 2" x-transition x-cloak>
-                        <h2 class="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2">
+                        <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
                             <span class="text-2xl">✨</span> 功能描述
                         </h2>
+                        <!-- 简要说明 -->
+                        <div class="bg-green-50 rounded-lg px-4 py-2 mb-4 text-sm text-green-700">
+                            💡 这些信息会显示在插件详情页，帮助用户了解如何使用。<b>都是选填</b>，但填写完整更容易被用户安装。
+                        </div>
                         <div class="space-y-4">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">详细介绍</label>
-                                <textarea x-model="form.full_description" rows="3" placeholder="详细描述你的插件功能..."
+                                <textarea x-model="form.full_description" rows="3" placeholder="详细描述插件能做什么、有什么特点、适合什么场景使用..."
                                           class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-purple-400 focus:ring-2 focus:ring-purple-100 transition-all"></textarea>
+                                <p class="text-xs text-gray-400 mt-1">比简短介绍更详细的说明，不填则使用简短介绍</p>
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">
-                                    功能特色 <span class="text-gray-400 font-normal text-xs">（每行一个）</span>
-                                </label>
-                                <textarea x-model="form.features_text" rows="4" placeholder="🎲 支持多种骰子类型&#10;🔢 可以同时投掷多个骰子&#10;📊 自动统计结果"
+                                <label class="block text-sm font-medium text-gray-700 mb-1">功能特色</label>
+                                <textarea x-model="form.features_text" rows="4" placeholder="🎲 支持多种骰子类型（D4/D6/D8/D10/D12/D20）&#10;🔢 可以同时投掷多个骰子&#10;📊 自动统计和计算结果"
                                           class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-purple-400 focus:ring-2 focus:ring-purple-100 transition-all font-mono text-sm"></textarea>
+                                <p class="text-xs text-gray-400 mt-1">每行一个特色功能，建议加emoji更直观</p>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">使用方法</label>
-                                <textarea x-model="form.usage" rows="2" placeholder="对白说「xxx」即可触发..."
+                                <textarea x-model="form.usage" rows="2" placeholder="对白说「今日运势」「帮我算一卦」等即可触发，白会返回详细的运势分析"
                                           class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-purple-400 focus:ring-2 focus:ring-purple-100 transition-all"></textarea>
+                                <p class="text-xs text-gray-400 mt-1">告诉用户怎么触发这个插件、会得到什么结果</p>
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">
-                                    触发命令 <span class="text-gray-400 font-normal text-xs">（用逗号分隔）</span>
-                                </label>
-                                <input type="text" x-model="form.commands_text" placeholder="命令1, 命令2, 命令3"
+                                <label class="block text-sm font-medium text-gray-700 mb-1">触发命令</label>
+                                <input type="text" x-model="form.commands_text" placeholder="今日运势, 运势, 算卦, 今天运气怎么样"
                                        class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-purple-400 focus:ring-2 focus:ring-purple-100 transition-all">
+                                <p class="text-xs text-gray-400 mt-1">用逗号分隔，用户说这些话会触发插件</p>
                             </div>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
@@ -202,7 +212,7 @@
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1">注意事项</label>
-                                    <input type="text" x-model="form.notes" placeholder="使用时需要注意的地方..."
+                                    <input type="text" x-model="form.notes" placeholder="如：需要联网、仅供娱乐参考等"
                                            class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-purple-400 focus:ring-2 focus:ring-purple-100 transition-all">
                                 </div>
                             </div>
@@ -211,19 +221,29 @@
                     
                     <!-- 步骤3：插件代码 -->
                     <div x-show="step === 3" x-transition x-cloak>
-                        <h2 class="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2">
-                            <span class="text-2xl">💻</span> 插件代码
+                        <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+                            <span class="text-2xl">💻</span> 插件代码 <span class="text-red-500">*</span>
                         </h2>
+                        <!-- 简要说明 -->
+                        <div class="bg-blue-50 rounded-lg px-4 py-2 mb-4 text-sm text-blue-700">
+                            💡 点击<b>「加载模板」</b>获取标准代码结构，然后修改其中的逻辑。代码必须包含 <code class="bg-blue-100 px-1 rounded">Plugin</code> 类和 <code class="bg-blue-100 px-1 rounded">plugin</code> 实例。
+                        </div>
                         <div class="relative">
                             <div class="absolute top-2 right-2 z-10">
-                                <button @click="loadTemplate()" class="px-4 py-2 bg-purple-100 text-purple-600 rounded-lg text-sm hover:bg-purple-200 transition-colors">
+                                <button @click="loadTemplate()" class="px-4 py-2 bg-purple-100 text-purple-600 rounded-lg text-sm hover:bg-purple-200 transition-colors font-medium">
                                     📄 加载模板
                                 </button>
                             </div>
-                            <textarea x-model="form.code" rows="20" placeholder="# 在这里粘贴你的 plugin.py 代码..."
+                            <textarea x-model="form.code" rows="20" placeholder="# 在这里粘贴你的 plugin.py 代码...&#10;# 点击右上角「加载模板」获取标准结构"
                                       class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-purple-400 focus:ring-2 focus:ring-purple-100 transition-all font-mono text-sm bg-gray-900 text-green-400"></textarea>
                         </div>
-                        <p class="text-sm text-gray-500 mt-2">💡 提示：点击「加载模板」可以获取标准的插件代码模板</p>
+                        <div class="mt-3 bg-gray-50 rounded-lg p-3 text-xs text-gray-600">
+                            <b>代码要求：</b>
+                            <span class="inline-flex items-center gap-1 ml-2">✅ 包含 <code class="bg-gray-200 px-1 rounded">class Plugin</code></span>
+                            <span class="inline-flex items-center gap-1 ml-2">✅ 包含 <code class="bg-gray-200 px-1 rounded">can_handle()</code> 方法</span>
+                            <span class="inline-flex items-center gap-1 ml-2">✅ 包含 <code class="bg-gray-200 px-1 rounded">handle()</code> 方法</span>
+                            <span class="inline-flex items-center gap-1 ml-2">✅ 导出 <code class="bg-gray-200 px-1 rounded">plugin = Plugin()</code></span>
+                        </div>
                     </div>
                 </div>
                 
