@@ -1,0 +1,14 @@
+{
+    "name": "whitesalary-plugins-web",
+    "version": "1.0.0",
+    "description": "白的插件市场 - 在线提交插件",
+    "scripts": {
+        "dev": "vercel dev"
+    },
+    "dependencies": {},
+    "devDependencies": {
+        "vercel": "^32.0.0"
+    }
+}
+
+
