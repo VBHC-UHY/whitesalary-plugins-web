@@ -226,7 +226,7 @@
                         </h2>
                         <!-- 简要说明 -->
                         <div class="bg-blue-50 rounded-lg px-4 py-2 mb-4 text-sm text-blue-700">
-                            💡 点击<b>「加载模板」</b>获取标准代码结构，然后修改其中的逻辑。代码必须包含 <code class="bg-blue-100 px-1 rounded">Plugin</code> 类和 <code class="bg-blue-100 px-1 rounded">plugin</code> 实例。
+                            💡 点击<b>「加载模板」</b>获取标准代码结构，然后修改其中的逻辑。代码必须继承 <code class="bg-blue-100 px-1 rounded">BasePlugin</code> 并导出 <code class="bg-blue-100 px-1 rounded">Plugin = 类名</code>。
                         </div>
                         <div class="relative">
                             <div class="absolute top-2 right-2 z-10">
@@ -239,10 +239,10 @@
                         </div>
                         <div class="mt-3 bg-gray-50 rounded-lg p-3 text-xs text-gray-600">
                             <b>代码要求：</b>
-                            <span class="inline-flex items-center gap-1 ml-2">✅ 包含 <code class="bg-gray-200 px-1 rounded">class Plugin</code></span>
-                            <span class="inline-flex items-center gap-1 ml-2">✅ 包含 <code class="bg-gray-200 px-1 rounded">can_handle()</code> 方法</span>
-                            <span class="inline-flex items-center gap-1 ml-2">✅ 包含 <code class="bg-gray-200 px-1 rounded">handle()</code> 方法</span>
-                            <span class="inline-flex items-center gap-1 ml-2">✅ 导出 <code class="bg-gray-200 px-1 rounded">plugin = Plugin()</code></span>
+                            <span class="inline-flex items-center gap-1 ml-2">✅ 继承 <code class="bg-gray-200 px-1 rounded">BasePlugin</code></span>
+                            <span class="inline-flex items-center gap-1 ml-2">✅ 定义 <code class="bg-gray-200 px-1 rounded">meta = PluginMeta(...)</code></span>
+                            <span class="inline-flex items-center gap-1 ml-2">✅ 实现 <code class="bg-gray-200 px-1 rounded">on_message()</code> 方法</span>
+                            <span class="inline-flex items-center gap-1 ml-2">✅ 导出 <code class="bg-gray-200 px-1 rounded">Plugin = 类名</code></span>
                         </div>
                     </div>
                 </div>
@@ -345,56 +345,65 @@
             },
             
             loadTemplate() {
-                this.form.code = `"""
+                const className = (this.form.id || 'my_plugin')
+                    .split('_')
+                    .map(w => w.charAt(0).toUpperCase() + w.slice(1))
+                    .join('') + 'Plugin';
+                
+                this.form.code = `# -*- coding: utf-8 -*-
+"""
 ${this.form.cn_name || '插件名称'}
 描述：${this.form.description || '这个插件做什么'}
 作者：${this.form.author || '你的名字'}
 """
+import logging
+from typing import Optional
 
-import re
-from typing import Optional, Dict, Any
+from src.core.plugins.base import BasePlugin, PluginMeta
+
+logger = logging.getLogger(__name__)
 
 
-class Plugin:
-    """插件主类"""
+class ${className}(BasePlugin):
+    """${this.form.cn_name || '插件名称'}"""
     
-    def __init__(self):
-        self.name = "${this.form.id || 'my_plugin'}"
-        self.cn_name = "${this.form.cn_name || '插件中文名'}"
-        self.description = "${this.form.description || '插件描述'}"
-        self.version = "${this.form.version || '1.0.0'}"
-        self.author = "${this.form.author || '作者'}"
-        
-        # 触发关键词（正则表达式）
-        self.triggers = [
-            r"关键词1",
-            r"关键词2",
-        ]
+    meta = PluginMeta(
+        name="${this.form.id || 'my_plugin'}",
+        version="${this.form.version || '1.0.0'}",
+        author="${this.form.author || '作者'}",
+        description="${this.form.description || '插件描述'}"
+    )
     
-    def can_handle(self, message: str) -> bool:
-        """检查是否应该处理这条消息"""
-        for trigger in self.triggers:
-            if re.search(trigger, message, re.IGNORECASE):
-                return True
-        return False
+    # 触发关键词
+    TRIGGERS = ["关键词1", "关键词2"]
     
-    async def handle(self, message: str, context: Dict[str, Any]) -> Optional[str]:
+    async def on_load(self) -> None:
+        """插件加载时调用"""
+        self.log(f"✅ 插件 {self.meta.name} v{self.meta.version} 已加载")
+    
+    async def on_message(self, message: str, user_id: str, group_id: Optional[str] = None, **kwargs) -> Optional[str]:
         """
-        处理消息并返回响应
+        处理消息
         
         Args:
             message: 用户发送的消息
-            context: 上下文信息
+            user_id: 用户ID
+            group_id: 群组ID（如果是群聊）
+            **kwargs: 其他参数（nickname, is_owner 等）
         
         Returns:
-            响应文本，或 None 表示不响应
+            响应文本，或 None 表示不处理
         """
+        # 检查是否触发
+        if not any(trigger in message for trigger in self.TRIGGERS):
+            return None
+        
         # 在这里实现你的逻辑
         return "这是插件的回复！"
 
 
-# 导出插件实例
-plugin = Plugin()
+# 导出插件类（必须）
+Plugin = ${className}
 `;
             },
             
