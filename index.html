@@ -209,6 +209,58 @@
                                        class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-purple-400 focus:ring-2 focus:ring-purple-100 transition-all">
                                 <p class="text-xs text-gray-400 mt-1">用逗号分隔，用户说这些话会触发插件</p>
                             </div>
+                            <div class="bg-indigo-50 rounded-xl p-4 border border-indigo-100">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">插件角色</label>
+                                <div class="grid grid-cols-1 md:grid-cols-4 gap-2 text-sm">
+                                    <label class="flex items-center gap-2 bg-white rounded-lg px-3 py-2 border border-indigo-100">
+                                        <input type="checkbox" value="interceptor" x-model="form.roles">
+                                        <span>抢答/拦截</span>
+                                    </label>
+                                    <label class="flex items-center gap-2 bg-white rounded-lg px-3 py-2 border border-indigo-100">
+                                        <input type="checkbox" value="rewriter" x-model="form.roles">
+                                        <span>改写回复</span>
+                                    </label>
+                                    <label class="flex items-center gap-2 bg-white rounded-lg px-3 py-2 border border-indigo-100">
+                                        <input type="checkbox" value="tool_provider" x-model="form.roles">
+                                        <span>提供工具</span>
+                                    </label>
+                                    <label class="flex items-center gap-2 bg-white rounded-lg px-3 py-2 border border-indigo-100">
+                                        <input type="checkbox" value="observer" x-model="form.roles">
+                                        <span>只观察学习</span>
+                                    </label>
+                                </div>
+                                <p class="text-xs text-indigo-500 mt-2">旧插件可以继续不填；新插件建议只勾实际需要的角色，避免无意义抢答或改写。</p>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">适用平台</label>
+                                    <input type="text" x-model="form.platforms_text" placeholder="all, qq, desktop, bilibili, qzone, server"
+                                           class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-purple-400 focus:ring-2 focus:ring-purple-100 transition-all">
+                                    <p class="text-xs text-gray-400 mt-1">多个值用逗号或换行分隔；不确定就填 all。</p>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">权限提示</label>
+                                    <input type="text" x-model="form.permissions_text" placeholder="owner, admin, network, filesystem, screenshot"
+                                           class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-purple-400 focus:ring-2 focus:ring-purple-100 transition-all">
+                                    <p class="text-xs text-gray-400 mt-1">用于安装前提示，不会绕过运行时权限检查。</p>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">依赖服务</label>
+                                    <input type="text" x-model="form.requires_service_text" placeholder="napcat, comfyui, siliconflow, browser"
+                                           class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-purple-400 focus:ring-2 focus:ring-purple-100 transition-all">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Python 依赖</label>
+                                    <input type="text" x-model="form.dependencies_text" placeholder="httpx, pillow, beautifulsoup4"
+                                           class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-purple-400 focus:ring-2 focus:ring-purple-100 transition-all">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">资源文件路径</label>
+                                <textarea x-model="form.assets_text" rows="2" placeholder="assets/icon.png&#10;prompts/system.md&#10;docs/help.md"
+                                          class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-purple-400 focus:ring-2 focus:ring-purple-100 transition-all font-mono text-sm"></textarea>
+                                <p class="text-xs text-gray-400 mt-1">资源路径必须在插件目录内部。网页表单会记录路径；带文件内容的自动上传可走 API 的 files 字段或本地同步工具。</p>
+                            </div>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1">更新日志</label>
@@ -231,7 +283,7 @@
                         </h2>
                         <!-- 简要说明 -->
                         <div class="bg-blue-50 rounded-lg px-4 py-2 mb-4 text-sm text-blue-700">
-                            💡 点击<b>「加载模板」</b>获取标准代码结构，然后修改其中的逻辑。代码必须继承 <code class="bg-blue-100 px-1 rounded">BasePlugin</code> 并导出 <code class="bg-blue-100 px-1 rounded">Plugin = 类名</code>。
+                            💡 点击<b>「加载模板」</b>获取标准代码结构，然后修改其中的逻辑。代码必须继承 <code class="bg-blue-100 px-1 rounded">Plugin</code> 并导出 <code class="bg-blue-100 px-1 rounded">Plugin = 类名</code>。
                         </div>
                         <div class="relative">
                             <div class="absolute top-2 right-2 z-10">
@@ -244,7 +296,7 @@
                         </div>
                         <div class="mt-3 bg-gray-50 rounded-lg p-3 text-xs text-gray-600">
                             <b>代码要求：</b>
-                            <span class="inline-flex items-center gap-1 ml-2">✅ 继承 <code class="bg-gray-200 px-1 rounded">BasePlugin</code></span>
+                            <span class="inline-flex items-center gap-1 ml-2">✅ 继承 <code class="bg-gray-200 px-1 rounded">Plugin</code></span>
                             <span class="inline-flex items-center gap-1 ml-2">✅ 定义 <code class="bg-gray-200 px-1 rounded">meta = PluginMeta(...)</code></span>
                             <span class="inline-flex items-center gap-1 ml-2">✅ 实现 <code class="bg-gray-200 px-1 rounded">on_message()</code> 方法</span>
                             <span class="inline-flex items-center gap-1 ml-2">✅ 导出 <code class="bg-gray-200 px-1 rounded">Plugin = 类名</code></span>
@@ -325,6 +377,12 @@
                 features_text: '',
                 usage: '',
                 commands_text: '',
+                roles: ['interceptor', 'rewriter', 'tool_provider'],
+                platforms_text: 'all',
+                permissions_text: '',
+                requires_service_text: '',
+                dependencies_text: '',
+                assets_text: '',
                 changelog: 'v1.0.0 - 初始版本',
                 notes: '',
                 code: ''
@@ -364,19 +422,20 @@ ${this.form.cn_name || '插件名称'}
 import logging
 from typing import Optional
 
-from src.core.plugins.base import BasePlugin, PluginMeta
+from white_salary.core.plugins.base import Plugin, PluginMeta
 
 logger = logging.getLogger(__name__)
 
 
-class ${className}(BasePlugin):
+class ${className}(Plugin):
     """${this.form.cn_name || '插件名称'}"""
     
     meta = PluginMeta(
         name="${this.form.id || 'my_plugin'}",
         version="${this.form.version || '1.0.0'}",
         author="${this.form.author || '作者'}",
-        description="${this.form.description || '插件描述'}"
+        description="${this.form.description || '插件描述'}",
+        roles=${JSON.stringify(this.form.roles && this.form.roles.length ? this.form.roles : ['interceptor', 'rewriter', 'tool_provider'])}
     )
     
     # 触发关键词
@@ -406,6 +465,18 @@ class ${className}(BasePlugin):
         # 在这里实现你的逻辑
         return "这是插件的回复！"
 
+    async def on_observe(self, text: str, user_id: str = "", metadata: Optional[dict] = None) -> None:
+        """observer 角色在这里记录/学习消息；不要抢答。"""
+        return None
+
+    async def on_reply(self, text: str) -> str:
+        """rewriter 角色可在这里改写 AI 最终回复。"""
+        return text
+
+    def get_tools(self):
+        """tool_provider 角色可在这里注册工具。"""
+        return []
+
 
 # 导出插件类（必须）
 Plugin = ${className}
@@ -422,12 +493,18 @@ Plugin = ${className}
                     category: '娱乐游戏',
                     description: '',
                     full_description: '',
-                    features_text: '',
-                    usage: '',
-                    commands_text: '',
-                    changelog: 'v1.0.0 - 初始版本',
-                    notes: '',
-                    code: ''
+                features_text: '',
+                usage: '',
+                commands_text: '',
+                roles: ['interceptor', 'rewriter', 'tool_provider'],
+                platforms_text: 'all',
+                permissions_text: '',
+                requires_service_text: '',
+                dependencies_text: '',
+                assets_text: '',
+                changelog: 'v1.0.0 - 初始版本',
+                notes: '',
+                code: ''
                 };
             },
             
@@ -440,6 +517,11 @@ Plugin = ${className}
                 this.submitting = true;
                 
                 try {
+                    const parseList = (value) => (value || '')
+                        .replace(/，/g, ',')
+                        .split(/[\n,]/)
+                        .map(v => v.trim())
+                        .filter(Boolean);
                     const features = this.form.features_text
                         .split('\n')
                         .map(f => f.trim())
@@ -449,6 +531,7 @@ Plugin = ${className}
                         .split(/[,，]/)
                         .map(c => c.trim())
                         .filter(c => c);
+                    const dependencies = parseList(this.form.dependencies_text);
                     
                     const res = await fetch('/api/submit', {
                         method: 'POST',
@@ -464,6 +547,12 @@ Plugin = ${className}
                             features: features,
                             usage: this.form.usage,
                             commands: commands,
+                            roles: this.form.roles,
+                            platforms: parseList(this.form.platforms_text),
+                            permissions: parseList(this.form.permissions_text),
+                            requires_service: parseList(this.form.requires_service_text),
+                            dependencies: dependencies.length ? { python: dependencies } : {},
+                            assets: parseList(this.form.assets_text),
                             changelog: this.form.changelog,
                             notes: this.form.notes,
                             code: this.form.code
